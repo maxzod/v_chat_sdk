@@ -11,15 +11,19 @@ class CustomDio {
   late Dio dio;
 
   CustomDio() {
+    // TODO ::  add to constructor to be able to mock it
     dio = Dio();
     dio.options.baseUrl = baseUrl;
     dio.options.validateStatus = (_) => true;
     dio.options.headers = {
+      // GET storage have issues with IOS and reset on every update
       'authorization': GetStorage().read("myModel") == null
           ? ""
           : GetStorage().read("myModel")['accessToken']
     };
+
     dio.options.sendTimeout = 10000;
+
     dio.options.receiveTimeout = 10000;
     dio.options.connectTimeout = 10000;
   }
@@ -104,12 +108,13 @@ class CustomDio {
     }
   }
 
-  Future<Response> uploadFiles(
-      {required String apiEndPoint,
-      required List<DioUploadFileModel> filesModel,
-      void Function(int received, int total)? sendProgress,
-      List<Map<String, String>>? body,
-      CancelToken? cancelToken}) async {
+  Future<Response> uploadFiles({
+    required String apiEndPoint,
+    required List<DioUploadFileModel> filesModel,
+    void Function(int received, int total)? sendProgress,
+    List<Map<String, String>>? body,
+    CancelToken? cancelToken,
+  }) async {
     final mapOfData = <String, dynamic>{};
     for (final file in filesModel) {
       final _file = File(file.filePath);
@@ -133,13 +138,16 @@ class CustomDio {
     return response;
   }
 
-  Future<Response> uploadFile(
-      {required String apiEndPoint,
-      required String filePath,
-      bool isPost = true,
-      void Function(int received, int total)? sendProgress,
-      List<Map<String, String>>? body,
-      CancelToken? cancelToken}) async {
+// TODO :: validate file size before uploading
+
+  Future<Response> uploadFile({
+    required String apiEndPoint,
+    required String filePath,
+    bool isPost = true,
+    void Function(int received, int total)? sendProgress,
+    List<Map<String, String>>? body,
+    CancelToken? cancelToken,
+  }) async {
     final File file = File(filePath);
     final String fileName = basename(file.path);
     final FormData data = FormData.fromMap({
@@ -169,7 +177,11 @@ class CustomDio {
       {required String apiEndPoint,
       required Uint8List bytes,
       required String bytesExtension,
-      void Function(int received, int total)? sendProgress,
+      void Function(
+        int received,
+        int total,
+      )?
+          sendProgress,
       List<Map<String, String>>? body,
       CancelToken? cancelToken}) async {
     //if the file is image then app .png
@@ -187,17 +199,19 @@ class CustomDio {
   }
 
   void throwIfNoSuccess(Response response) {
+    // TODO :: use middleware to handle error
     if (response.statusCode! > 300) {
       final errorMsg = response.data.toString();
       throw (errorMsg);
     }
   }
 
-  Future<Response> download(
-      {required String path,
-      void Function(int received, int total)? sendProgress,
-      required String filePath,
-      CancelToken? cancelToken}) async {
+  Future<Response> download({
+    required String path,
+    void Function(int received, int total)? sendProgress,
+    required String filePath,
+    CancelToken? cancelToken,
+  }) async {
     final res = await dio.download(
       path,
       filePath,
@@ -212,6 +226,8 @@ class DioUploadFileModel {
   final String filePath;
   final String fileFiledName;
 
-  const DioUploadFileModel(
-      {required this.filePath, required this.fileFiledName});
+  const DioUploadFileModel({
+    required this.filePath,
+    required this.fileFiledName,
+  });
 }

@@ -6,7 +6,7 @@ import 'package:v_chat_sdk/v_chat_sdk.dart';
 import '../models/user.dart';
 
 class HomeController {
-  BuildContext context;
+  final BuildContext context;
 
   HomeController(this.context);
 
@@ -26,8 +26,10 @@ class HomeController {
 
   void startChat(String email) async {
     try {
-      await VChatController.instance
-          .createSingleChat(ctx: context, peerEmail: email);
+      await VChatController.instance.createSingleChat(
+        ctx: context,
+        peerEmail: email,
+      );
     } on VChatSdkException catch (err) {
       CustomAlert.showError(context: context, err: err.toString());
       rethrow;

@@ -9,7 +9,7 @@ import '../screens/home.dart';
 import '../screens/register_screen.dart';
 
 class LoginController {
-  BuildContext context;
+  final BuildContext context;
   final emailTxtController = TextEditingController();
   final passwordTxtController = TextEditingController();
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import '../enums/room_type.dart';
 
+// TODO  :: == operator
 class CreateSingleRoomDto {
   final List<int> usersIdsJson;
   final String message;

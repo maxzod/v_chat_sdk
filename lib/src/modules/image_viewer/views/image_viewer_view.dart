@@ -8,7 +8,7 @@ class ImageViewerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isRtl = Directionality.of(context).index == 0;
+    bool isRtl = Directionality.of(context) == TextDirection.rtl;
     return SafeArea(
       child: Stack(
         fit: StackFit.expand,
@@ -18,12 +18,11 @@ class ImageViewerView extends StatelessWidget {
           ),
           isRtl
               ? Positioned(
+                  // TODO :: fixed numbers
                   top: 20,
                   right: 10,
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => Navigator.pop(context),
                     child: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
@@ -34,9 +33,7 @@ class ImageViewerView extends StatelessWidget {
                   top: 20,
                   left: 10,
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => Navigator.pop(context),
                     child: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,

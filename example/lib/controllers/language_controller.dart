@@ -4,20 +4,24 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class LanguageController extends ChangeNotifier {
-  Locale locale = ui.window.locale;
-  ThemeData theme = ThemeData.light();
+  Locale _locale = ui.window.locale;
+  Locale get locale => _locale;
+
+  ThemeData _theme = ThemeData.light();
+  ThemeData get theme => _theme;
 
   void changeTheme(bool isLight) {
+    // TODO :: support the app theme not just only dark and light
     if (isLight) {
-      theme = ThemeData.dark();
+      _theme = ThemeData.dark();
     } else {
-      theme = ThemeData.light();
+      _theme = ThemeData.light();
     }
     notifyListeners();
   }
 
   void setLocale(Locale value) {
-    locale = value;
+    _locale = value;
     notifyListeners();
   }
 }
